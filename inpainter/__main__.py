@@ -2,13 +2,21 @@ import argparse
 from skimage.io import imread, imsave
 
 from inpainter import Inpainter
-
+import numpy as np
 
 def main():
     args = parse_args()
 
-    image = imread(args.input_image)
-    mask = imread(args.mask, as_gray=True)
+    # image shape: (r, c, 3)
+    # image values: 0 - 255
+    # mask shape: (r, c)
+    # mask values: 1.0(parts to be filled in) or 0.0(parts not to be filled in)
+    if '.npy' in args.input_image:
+        image = np.load(args.input_image)
+        mask = np.load(args.mask)
+    else:
+        image = imread(args.input_image)
+        mask = imread(args.mask, as_gray=True)
 
     output_image = Inpainter(
         image,
