@@ -25,6 +25,7 @@ def main():
         image = np.expand_dims(image, axis=0)
         mask = np.expand_dims(mask, axis=0)
 
+    image_list = []
     for i in range(image.shape[0]):
         output_image = Inpainter(
             image[i],
@@ -37,6 +38,9 @@ def main():
             output_image = output_image[:,:,0]
         
         imsave(args.output + str(i) + '.jpg', output_image, quality=100)
+        image_list.append(output_image)
+    image_list = np.array(image_list)
+    np.save(args.output + '.npy', image_list)
 
 def parse_args():
     parser = argparse.ArgumentParser()
